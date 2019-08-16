@@ -1,3 +1,3 @@
 cmake_minimum_required (VERSION 2.6)
-project (Feature)
-add_executable (Feature builder.cpp)
+project (builder)
+add_executable (builder builder_v1.cpp)
