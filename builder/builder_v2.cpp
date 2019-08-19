@@ -4,26 +4,15 @@
 
 #define DEBUG_STAUTS 0
 
+// Product
 class CPizza
 {
 public:
-	void setDough(const std::string& dough)
-	{
-		m_dough = dough;
-	}
-	void setSauce(const std::string& sauce)
-	{
-		m_sauce = sauce;
-	}
-	void setTopping(const std::string& topping) 
-	{
-		m_topping = topping;
-	}
-	void setPizzaName(const std::string& name) 
-	{
-		m_name = name;
-	}	
-	void printPizzaInfo()
+	void setDough(const std::string& dough) 	{ m_dough = dough; }
+	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
+	void setTopping(const std::string& topping) { m_topping = topping; }
+	void setPizzaName(const std::string& name) 	{ m_name = name;	}	
+	void printPizzaInfo() const
 	{
 		std::cout << m_name << " => dough : " << m_dough << " , " << "sauce : " << m_sauce 
 		<< " , " << "topping : " << m_topping << std::endl;
@@ -46,8 +35,40 @@ private:
 // Abstract Builder
 class CPizzaBuilder
 {
+protected:
+	std::unique_ptr<CPizza> pizza;
 public:
-	virtual std::unique_ptr<CPizza> constructPizza() = 0;
+	void createPizzaProduct()
+	{
+#if 1		
+		// c++11
+		pizza.reset(new CPizza);
+#else		
+		// since c++ 14
+		pizza = std::make_unique<CPizza>();
+#endif		
+	}
+	
+	// getResult() : Product
+#if 1
+	// c++ 11
+	auto getPizza() noexcept -> std::unique_ptr<CPizza>
+#else
+	// since c++ 14
+	auto getPizza() noexcept
+	// if template is used
+	//decltype(auto) getPizza() noexcept
+#endif
+	{
+		return std::move(pizza);
+	}
+	
+	// buildPart()
+	virtual void buildPizzaName() = 0;
+    virtual void buildDough() = 0;
+    virtual void buildSauce() = 0;
+    virtual void buildTopping() = 0;
+	
 	virtual ~CPizzaBuilder() = default;
 };
 
@@ -55,45 +76,26 @@ public:
 class CSpicyPizzaBuilder : public CPizzaBuilder
 {
 public:
-	virtual std::unique_ptr<CPizza> constructPizza() override
-	{
-		std::unique_ptr<CPizza> pizza = std::make_unique<CPizza>();
-		pizza->setPizzaName("SpicyPizza");
-		pizza->setDough("pan baked");
-		pizza->setSauce("hot");
-		pizza->setTopping("pepperoni and salami");
+	// buildPart()
+	virtual void buildPizzaName() override 	{ pizza->setPizzaName("SpicyPizza"); }
+    virtual void buildDough() override		{ pizza->setDough("pan baked"); }
+    virtual void buildSauce() override		{ pizza->setSauce("hot"); }
+    virtual void buildTopping() override	{ pizza->setTopping("pepperoni and salami"); }
 
-		return pizza;
-	}
-
-#if DEBUG_STAUTS
-	~CSpicyPizzaBuilder()
-	{
-		std::cout << "~CSpicyPizzaBuilder() called check" << std::endl;
-	}
-#endif	
+	virtual ~CSpicyPizzaBuilder() = default;
 };
 
 // Concrete Builder
 class CHawaiianPizzaBuilder : public CPizzaBuilder
 {
 public:
-	virtual std::unique_ptr<CPizza> constructPizza() override
-	{
-		std::unique_ptr<CPizza> pizza = std::make_unique<CPizza>();
-		pizza->setPizzaName("HawaiianPizza");
-		pizza->setDough("cross");
-		pizza->setSauce("mild");
-		pizza->setTopping("ham and pineaple");
+	// buildPart()
+	virtual void buildPizzaName() override	{ pizza->setPizzaName("HawaiianPizza"); }
+    virtual void buildDough() override		{ pizza->setDough("cross"); }
+    virtual void buildSauce() override		{ pizza->setSauce("mild"); }
+    virtual void buildTopping() override	{ pizza->setTopping("ham and pineaple"); }
 
-		return pizza;
-	}
-#if DEBUG_STAUTS
-	~CHawaiianPizzaBuilder()
-	{
-		std::cout << "~CHawaiianPizzaBuilder() called check" << std::endl;
-	}
-#endif	
+	virtual ~CHawaiianPizzaBuilder() = default;
 };
 
 // Director
@@ -104,10 +106,25 @@ public:
 	{
 		pizzaBuilder = b;
 	}
-	std::unique_ptr<CPizza> constructPizza()
+
+	void constructPizza()
 	{
-		return pizzaBuilder->constructPizza();
+		pizzaBuilder->createPizzaProduct();
+		pizzaBuilder->buildPizzaName();
+		pizzaBuilder->buildDough();
+		pizzaBuilder->buildSauce();
+		pizzaBuilder->buildTopping();
 	}
+	
+#if 1
+	// c++ 11
+	auto getPizza() noexcept -> std::unique_ptr<CPizza> { return std::move(pizzaBuilder->getPizza()); }
+#else
+	// since c++ 14
+	auto getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
+	// if template is used
+	//decltype(auto) getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
+#endif
 private:
 	CPizzaBuilder* pizzaBuilder;
 };
@@ -118,12 +135,14 @@ int main()
 	
 	CHawaiianPizzaBuilder hawaiianPizzaBuilder;
 	waiter.setPizzaBuilder(&hawaiianPizzaBuilder);
-	std::unique_ptr<CPizza> hawaiianPizza = waiter.constructPizza();
-	hawaiianPizza->printPizzaInfo();
+	waiter.constructPizza();
+	auto hwaiianPizza = waiter.getPizza();
+	hwaiianPizza->printPizzaInfo();
 
 	CSpicyPizzaBuilder spicyPizzaBuilder;
 	waiter.setPizzaBuilder(&spicyPizzaBuilder);
-	std::unique_ptr<CPizza> spicyPizza = waiter.constructPizza();
+	waiter.constructPizza();
+	auto spicyPizza = waiter.getPizza();
 	spicyPizza->printPizzaInfo();
 	
 	return 0;
