@@ -49,21 +49,11 @@ public:
 #endif
 	}
 
+	// same production process
 	void buildPizzaName(const std::string& name) 	{ pizza->setPizzaName(name); }
     void buildDough(const std::string& dough) 		{ pizza->setDough(dough); }
     void buildSauce(const std::string& sauce) 		{ pizza->setSauce(sauce); }
     void buildTopping(const std::string& topping) 	{ pizza->setTopping(topping); }
-	
-	std::unique_ptr<CPizza> constructPizza(const std::string &str)
-	{
-		std::unique_ptr<CPizza> pizza = std::make_unique<CPizza>();
-		pizza->setPizzaName(str);
-		pizza->setDough("pan baked");
-		pizza->setSauce("hot");
-		pizza->setTopping("pepperoni and salami");
-		
-		return pizza; // NRVO (Named Return Value Optiomization)
-	}
 	
 #if 1
 	// c++ 11
