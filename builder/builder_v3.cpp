@@ -56,6 +56,8 @@ public:
 #else
 	// since c++ 14
 	auto getPizza() noexcept
+	// if template is used
+	//decltype(auto) getPizza() noexcept
 #endif
 	{
 		return std::move(pizza);
@@ -120,6 +122,8 @@ public:
 #else
 	// since c++ 14
 	auto getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
+	// if template is used
+	//decltype(auto) getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
 #endif
 private:
 	CPizzaBuilder* pizzaBuilder;
