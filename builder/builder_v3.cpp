@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 
-#define DEBUG_STAUTS 1
+#define DEBUG_STAUTS 0
 
 // Product
 class CPizza
@@ -50,7 +50,13 @@ public:
 	}
 	
 	// getResult() : Product
-	std::unique_ptr<CPizza> getPizza() noexcept
+#if 1
+	// c++ 11
+	auto getPizza() noexcept -> std::unique_ptr<CPizza>
+#else
+	// since c++ 14
+	auto getPizza() noexcept
+#endif
 	{
 		return std::move(pizza);
 	}
@@ -108,7 +114,13 @@ public:
 		pizzaBuilder->buildTopping();
 	}
 	
-	std::unique_ptr<CPizza> getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
+#if 1
+	// c++ 11
+	auto getPizza() noexcept -> std::unique_ptr<CPizza> { return std::move(pizzaBuilder->getPizza()); }
+#else
+	// since c++ 14
+	auto getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
+#endif
 private:
 	CPizzaBuilder* pizzaBuilder;
 };
@@ -120,13 +132,13 @@ int main()
 	CHawaiianPizzaBuilder hawaiianPizzaBuilder;
 	waiter.setPizzaBuilder(&hawaiianPizzaBuilder);
 	waiter.constructPizza();
-	std::unique_ptr<CPizza> hwaiianPizza = waiter.getPizza();
+	auto hwaiianPizza = waiter.getPizza();
 	hwaiianPizza->printPizzaInfo();
 
 	CSpicyPizzaBuilder spicyPizzaBuilder;
 	waiter.setPizzaBuilder(&spicyPizzaBuilder);
 	waiter.constructPizza();
-	std::unique_ptr<CPizza> spicyPizza = waiter.getPizza();
+	auto spicyPizza = waiter.getPizza();
 	spicyPizza->printPizzaInfo();
 	
 	return 0;
