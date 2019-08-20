@@ -19,6 +19,8 @@ public:
 		<< " , " << "topping : " << m_topping << std::endl;
 	}
 
+	// CPizza 생성자를 호출하여 직접 객체 생성을 막기위함.
+	// CPizza 객체 생성을 전적으로 CPizzaBuilder에 위임
 private:
 	CPizza() = default;
 	

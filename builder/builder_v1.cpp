@@ -5,7 +5,6 @@
 // Product
 class CPizza
 {
-	friend class CPizzaBuilder;
 public:
 	void setDough(const std::string& dough) 	{ m_dough = dough; }
 	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
@@ -16,9 +15,6 @@ public:
 		std::cout << m_name << " => dough : " << m_dough << " , " << "sauce : " << m_sauce 
 		<< " , " << "topping : " << m_topping << std::endl;
 	}
-
-private:
-	CPizza() = default;
 
 private:
 	std::string m_dough;
