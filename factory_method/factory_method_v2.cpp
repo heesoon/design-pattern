@@ -1,155 +1,93 @@
 #include <iostream>
-#include <string>
 #include <memory>
+#include <string>
 
-#define DEBUG_STAUTS 0
+// factory method design pattern study
 
-// Product
 class CPizza
 {
-	friend class CPizzaBuilder;
 public:
-	void setDough(const std::string& dough) 	{ m_dough = dough; }
-	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
-	void setTopping(const std::string& topping) { m_topping = topping; }
-	void setPizzaName(const std::string& name) 	{ m_name = name;	}	
-	void printPizzaInfo() const
-	{
-		std::cout << m_name << " => dough : " << m_dough << " , " << "sauce : " << m_sauce 
-		<< " , " << "topping : " << m_topping << std::endl;
-	}
+	// CPizza의 소멸자는 없어야 한다. 여기서는 소멸자 호출을 보기위해서 디버그 용도로 추가한 것이다.
+	~CPizza(){std::cout << "~CPizza() called" << std::endl;}
 
-	// CPizza 생성자를 호출하여 직접 객체 생성을 막기위함.
-	// CPizza 객체 생성을 전적으로 CPizzaBuilder에 위임
-private:
-	CPizza() = default;
-	
-#if DEBUG_STAUTS
-	~CPizza()
-	{
-		std::cout << "~CPizza() called check" << std::endl;
-	}
-#endif
-	
-private:
-	std::string m_dough;
-	std::string m_sauce;
-	std::string m_topping;
-	std::string m_name;
-};
-
-// Abstract Builder
-class CPizzaBuilder
-{
 protected:
-	std::unique_ptr<CPizza> pizza;
+	explicit CPizza(std::string d, std::string s, std::string t) : dough(d), sauce(s), topping(t)
+	{
+		std::cout << "3 param CPizza() called" << std::endl;
+	}
+
+//private:
 public:
-	void createPizzaProduct()
-	{
-#if 1		
-		// c++11
-		pizza.reset(new CPizza);
-#else		
-		// since c++ 14
-		pizza = std::make_unique<CPizza>();
-#endif		
-	}
-	
-	// getResult() : Product
-#if 1
-	// c++ 11
-	auto getPizza() noexcept -> std::unique_ptr<CPizza>
-#else
-	// since c++ 14
-	auto getPizza() noexcept
-	// if template is used
-	//decltype(auto) getPizza() noexcept
-#endif
-	{
-		return std::move(pizza);
-	}
-	
-	// buildPart()
-	virtual void buildPizzaName() = 0;
-    virtual void buildDough() = 0;
-    virtual void buildSauce() = 0;
-    virtual void buildTopping() = 0;
-	
-	virtual ~CPizzaBuilder() = default;
+	std::string dough;
+	std::string sauce;
+	std::string topping;
 };
 
-// Concrete Builder
-class CSpicyPizzaBuilder : public CPizzaBuilder
+class CSpicyPizza : public CPizza
 {
 public:
-	// buildPart()
-	virtual void buildPizzaName() override 	{ pizza->setPizzaName("SpicyPizza"); }
-    virtual void buildDough() override		{ pizza->setDough("pan baked"); }
-    virtual void buildSauce() override		{ pizza->setSauce("hot"); }
-    virtual void buildTopping() override	{ pizza->setTopping("pepperoni and salami"); }
-
-	virtual ~CSpicyPizzaBuilder() = default;
+	//using CPizza::CPizza;
+	CSpicyPizza(std::string d, std::string s, std::string t) : CPizza(d, s, t)
+	{
+		std::cout << "3 param CSpicyPizza() called" << std::endl;
+	}
 };
 
-// Concrete Builder
-class CHawaiianPizzaBuilder : public CPizzaBuilder
+class CHwaiianPizza : public CPizza
 {
 public:
-	// buildPart()
-	virtual void buildPizzaName() override	{ pizza->setPizzaName("HawaiianPizza"); }
-    virtual void buildDough() override		{ pizza->setDough("cross"); }
-    virtual void buildSauce() override		{ pizza->setSauce("mild"); }
-    virtual void buildTopping() override	{ pizza->setTopping("ham and pineaple"); }
-
-	virtual ~CHawaiianPizzaBuilder() = default;
+	//using CPizza::CPizza;
+	CHwaiianPizza(std::string d, std::string s, std::string t) : CPizza(d, s, t)
+	{
+		std::cout << "3 param CHwaiianPizza() called" << std::endl;
+	}
 };
 
-// Director
-class CWaiter
-{	
+class CPizzaFactoryBase
+{
 public:
-	void setPizzaBuilder(CPizzaBuilder* b)
+	virtual std::unique_ptr<CPizza> creatPizza(const std::string& str) = 0;
+};
+
+class CPizzaFactory : public CPizzaFactoryBase
+{
+	virtual std::unique_ptr<CPizza> creatPizza(const std::string& str)
 	{
-		pizzaBuilder = b;
+		if(str == "spicy")
+		{
+			return std::unique_ptr<CSpicyPizza>(new CSpicyPizza("pan baked", "hot", "pepperoni and salami"));
+		}
+		else if(str == "hawaiian")
+		{
+			return std::unique_ptr<CHwaiianPizza>(new CHwaiianPizza("cross", "mild", "ham and pineaple"));
+		}		
+	}
+};
+
+class CPizzaStore
+{
+public:
+
+	void setFactory(CPizzaFactoryBase *p)
+	{
+		factoryBase = p;
 	}
 
-	void constructPizza()
+	std::unique_ptr<CPizza> pizzaOrder(const std::string& str)
 	{
-		pizzaBuilder->createPizzaProduct();
-		pizzaBuilder->buildPizzaName();
-		pizzaBuilder->buildDough();
-		pizzaBuilder->buildSauce();
-		pizzaBuilder->buildTopping();
+		return factoryBase->creatPizza(str);
 	}
-	
-#if 1
-	// c++ 11
-	auto getPizza() noexcept -> std::unique_ptr<CPizza> { return std::move(pizzaBuilder->getPizza()); }
-#else
-	// since c++ 14
-	auto getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
-	// if template is used
-	//decltype(auto) getPizza() noexcept { return std::move(pizzaBuilder->getPizza()); }
-#endif
 private:
-	CPizzaBuilder* pizzaBuilder;
+	CPizzaFactoryBase *factoryBase = nullptr;
 };
 
 int main()
 {
-	CWaiter waiter;
+	CPizzaFactory factory;
+	CPizzaStore store;
+	store.setFactory(&factory);
 	
-	CHawaiianPizzaBuilder hawaiianPizzaBuilder;
-	waiter.setPizzaBuilder(&hawaiianPizzaBuilder);
-	waiter.constructPizza();
-	auto hwaiianPizza = waiter.getPizza();
-	hwaiianPizza->printPizzaInfo();
-
-	CSpicyPizzaBuilder spicyPizzaBuilder;
-	waiter.setPizzaBuilder(&spicyPizzaBuilder);
-	waiter.constructPizza();
-	auto spicyPizza = waiter.getPizza();
-	spicyPizza->printPizzaInfo();
+	std::unique_ptr<CPizza> spicyPizza = store.pizzaOrder("spicy");
 	
 	return 0;
 }
