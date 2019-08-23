@@ -2,92 +2,80 @@
 #include <memory>
 #include <string>
 
-// factory method design pattern study
+/*
+	c++ fatory method design pattern - version 2
+	
+	1) CPizza로부터 direct 객체 생성을 못하도록 처리한다.
+	-> Concrete class에서만 생성자 호출하도록 처리
+	2) CPizza로부터 상속받은 Concrete class를 통해 객체를 생성한다.
+	3) 객체 생성을 전담하는 클래스를 정의한다. (factory class)
+	
+*/
 
 class CPizza
 {
 public:
-	// CPizza의 소멸자는 없어야 한다. 여기서는 소멸자 호출을 보기위해서 디버그 용도로 추가한 것이다.
-	~CPizza(){std::cout << "~CPizza() called" << std::endl;}
-
+	void setDough(const std::string& dough) 	{ m_dough = dough; }
+	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
+	void setTopping(const std::string& topping) { m_topping = topping; }
+	void printPizzaInfo() const
+	{
+		std::cout << "Pizza Info. "<< "=> dough : " << m_dough << " , " << "sauce : " << m_sauce 
+		<< " , " << "topping : " << m_topping << std::endl;
+	}
+	
+	// 1) CPizza로부터 direct 객체 생성을 못하도록 처리한다.
 protected:
-	explicit CPizza(std::string d, std::string s, std::string t) : dough(d), sauce(s), topping(t)
-	{
-		std::cout << "3 param CPizza() called" << std::endl;
-	}
-
-//private:
-public:
-	std::string dough;
-	std::string sauce;
-	std::string topping;
-};
-
-class CSpicyPizza : public CPizza
-{
-public:
-	//using CPizza::CPizza;
-	CSpicyPizza(std::string d, std::string s, std::string t) : CPizza(d, s, t)
-	{
-		std::cout << "3 param CSpicyPizza() called" << std::endl;
-	}
-};
-
-class CHwaiianPizza : public CPizza
-{
-public:
-	//using CPizza::CPizza;
-	CHwaiianPizza(std::string d, std::string s, std::string t) : CPizza(d, s, t)
-	{
-		std::cout << "3 param CHwaiianPizza() called" << std::endl;
-	}
-};
-
-class CPizzaFactoryBase
-{
-public:
-	virtual std::unique_ptr<CPizza> creatPizza(const std::string& str) = 0;
-};
-
-class CPizzaFactory : public CPizzaFactoryBase
-{
-	virtual std::unique_ptr<CPizza> creatPizza(const std::string& str)
-	{
-		if(str == "spicy")
-		{
-			return std::unique_ptr<CSpicyPizza>(new CSpicyPizza("pan baked", "hot", "pepperoni and salami"));
-		}
-		else if(str == "hawaiian")
-		{
-			return std::unique_ptr<CHwaiianPizza>(new CHwaiianPizza("cross", "mild", "ham and pineaple"));
-		}		
-	}
-};
-
-class CPizzaStore
-{
-public:
-
-	void setFactory(CPizzaFactoryBase *p)
-	{
-		factoryBase = p;
-	}
-
-	std::unique_ptr<CPizza> pizzaOrder(const std::string& str)
-	{
-		return factoryBase->creatPizza(str);
-	}
+	CPizza() = default;
+	
 private:
-	CPizzaFactoryBase *factoryBase = nullptr;
+	std::string m_dough;
+	std::string m_sauce;
+	std::string m_topping;
 };
+
+// 2) CPizza로부터 상속받은 Concrete class를 통해 객체를 생성한다.
+class CSuperSupremePizza : public CPizza
+{
+public:
+	std::unique_ptr<CPizza> operator()()
+	{
+		std::unique_ptr<CPizza> up = std::make_unique<CSuperSupremePizza>();
+		
+		up->setDough("pan baked");
+		up->setSauce("mild");
+		up->setTopping("ham and pineaple");
+		
+		return up;  // return up; 는 up를 return하면서 up를 실제 받는 변수에 up를 전달하는 것과 같다.
+					// std::unique_ptr<CPizza> a = CSuperSupremePizza(); 이라면
+					// a.reset(up);
+	}
+};
+
+class CPotatoPizza : public CPizza
+{
+public:
+	std::unique_ptr<CPizza> operator()()
+	{
+		std::unique_ptr<CPizza> up = std::make_unique<CPotatoPizza>();
+		
+		up->setDough("pan baked");
+		up->setSauce("mild");
+		up->setTopping("potato");
+		
+		return up;  // return up; 는 up를 return하면서 up를 실제 받는 변수에 up를 전달하는 것과 같다.
+					// std::unique_ptr<CPizza> a = CPotatoPizza(); 이라면
+					// a.reset(up);
+	}
+};
+
+// 3) 객체 생성을 전담하는 클래스를 정의한다. (factory class)
+
+class CPizzFactory
+{
+}
 
 int main()
 {
-	CPizzaFactory factory;
-	CPizzaStore store;
-	store.setFactory(&factory);
-	
-	std::unique_ptr<CPizza> spicyPizza = store.pizzaOrder("spicy");
-	
 	return 0;
 }
