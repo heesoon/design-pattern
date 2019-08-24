@@ -40,7 +40,7 @@ class CSuperSupremePizza : public CPizza
 public:
 	std::unique_ptr<CPizza> operator()()
 	{
-		std::unique_ptr<CPizza> up = std::make_unique<CSuperSupremePizza>();
+		std::unique_ptr<CSuperSupremePizza> up = std::make_unique<CSuperSupremePizza>();
 		
 		up->setDough("pan baked");
 		up->setSauce("mild");
@@ -57,7 +57,7 @@ class CPotatoPizza : public CPizza
 public:
 	std::unique_ptr<CPizza> operator()()
 	{
-		std::unique_ptr<CPizza> up = std::make_unique<CPotatoPizza>();
+		std::unique_ptr<CPotatoPizza> up = std::make_unique<CPotatoPizza>();
 		
 		up->setDough("pan baked");
 		up->setSauce("mild");
@@ -70,12 +70,26 @@ public:
 };
 
 // 3) 객체 생성을 전담하는 클래스를 정의한다. (factory class)
-
 class CPizzFactory
 {
-}
+public:
+	// factory method
+	static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType)
+	{
+		switch(pizzaType)
+		{
+			case "superSupreme":
+				return CSuperSupremePizza();
+			case "potato":
+				return CPotatoPizza();				
+		}
+	}
+};
 
 int main()
 {
+	std::unique_ptr<CPizza> superSupremePizza = CPizzaFactory::productPizza("superSupreme");
+	superSupremePizza->printPizzaInfo();
+	
 	return 0;
 }
