@@ -5,12 +5,14 @@
 /*
 	c++ fatory method design pattern - version 2
 	
-	1) CPizza로부터 direct 객체 생성을 못하도록 처리한다.
-	-> Concrete class에서만 생성자 호출하도록 처리
-	2) CPizza로부터 상속받은 Concrete class를 통해 객체를 생성한다.
-	3) 객체 생성을 전담하는 클래스를 정의한다. (factory class)
+	1) 객체 생성을 전담하는 클래스를 별도로 둔다.
+	2) 어떤 클래스의 객체를 생성할지는 서브클래스에서 결정한다.
 	
 */
+
+// "2) 어떤 클래스의 객체를 생성할지는 서브클래스에서 결정한다."
+// 실제 생성할 객체는 CPizza이다. 하지만 CPizza는 interface만 제공한다.
+// 실제 생성할 객체의 결정은 CPizza에서 상속받은 자식클래스에서 결정한다.
 
 class CPizza
 {
@@ -24,9 +26,8 @@ public:
 		<< " , " << "topping : " << m_topping << std::endl;
 	}
 	
-	// 1) CPizza로부터 direct 객체 생성을 못하도록 처리한다.
-protected:
-	CPizza() = default;
+	// 서브클래스에서 작성해야할 가상함수
+	virtual std::unique_ptr<CPizza> operator()() = 0;
 	
 private:
 	std::string m_dough;
@@ -38,7 +39,8 @@ private:
 class CSuperSupremePizza : public CPizza
 {
 public:
-	std::unique_ptr<CPizza> operator()()
+	// 서브클래스에서 작성해야할 가상함수
+	virtual std::unique_ptr<CPizza> operator()() override
 	{
 		std::unique_ptr<CSuperSupremePizza> up = std::make_unique<CSuperSupremePizza>();
 		
@@ -55,7 +57,7 @@ public:
 class CPotatoPizza : public CPizza
 {
 public:
-	std::unique_ptr<CPizza> operator()()
+	virtual std::unique_ptr<CPizza> operator()() override
 	{
 		std::unique_ptr<CPotatoPizza> up = std::make_unique<CPotatoPizza>();
 		
@@ -69,26 +71,31 @@ public:
 	}
 };
 
-// 3) 객체 생성을 전담하는 클래스를 정의한다. (factory class)
+// 1) 객체 생성을 전담하는 클래스를 별도로 둔다.
 class CPizzFactory
 {
 public:
 	// factory method
 	static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType)
 	{
-		switch(pizzaType)
+		if(pizzaType == "superSupreme")
 		{
-			case "superSupreme":
-				return CSuperSupremePizza();
-			case "potato":
-				return CPotatoPizza();				
+			return CSuperSupremePizza()();
+		}
+		else if(pizzaType == "potato")
+		{
+			return CPotatoPizza()();
+		}
+		else
+		{
+			return nullptr;
 		}
 	}
 };
 
 int main()
 {
-	std::unique_ptr<CPizza> superSupremePizza = CPizzaFactory::productPizza("superSupreme");
+	std::unique_ptr<CPizza> superSupremePizza = CPizzFactory::productPizza("superSupreme");
 	superSupremePizza->printPizzaInfo();
 	
 	return 0;
