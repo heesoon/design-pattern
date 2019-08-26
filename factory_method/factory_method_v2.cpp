@@ -72,7 +72,14 @@ public:
 };
 
 // 1) 객체 생성을 전담하는 클래스를 별도로 둔다.
-class CPizzFactory
+class CPizzFactoryBase
+{
+public:
+	// factory method
+	virtual static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType) = 0;
+};
+
+class CPizzFactory : public CPizzFactoryBase
 {
 public:
 	// factory method
