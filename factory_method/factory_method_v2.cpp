@@ -75,18 +75,14 @@ public:
 class CPizzFactoryBase
 {
 public:
-	// factory method
-	static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType)
-	{
-		return nullptr;
-	}
+	virtual std::unique_ptr<CPizza> productPizza(const std::string &pizzaType) = 0;
 };
 
 class CPizzFactory : public CPizzFactoryBase
 {
 public:
 	// factory method
-	static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType)
+	virtual std::unique_ptr<CPizza> productPizza(const std::string &pizzaType) override
 	{
 		if(pizzaType == "superSupreme")
 		{
@@ -105,7 +101,8 @@ public:
 
 int main()
 {
-	std::unique_ptr<CPizza> superSupremePizza = CPizzFactory::productPizza("superSupreme");
+	std::unique_ptr<CPizzFactoryBase> factory = std::make_unique<CPizzFactory>();
+	std::unique_ptr<CPizza> superSupremePizza = factory->productPizza("superSupreme");
 	superSupremePizza->printPizzaInfo();
 	
 	return 0;
