@@ -12,10 +12,9 @@ public:
 	void setDough(const std::string& dough) 	{ m_dough = dough; }
 	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
 	void setTopping(const std::string& topping) { m_topping = topping; }
-	void setPizzaName(const std::string& name) 	{ m_name = name;	}	
 	void printPizzaInfo() const
 	{
-		std::cout << m_name << " => dough : " << m_dough << " , " << "sauce : " << m_sauce 
+		std::cout << "dough : " << m_dough << " , " << "sauce : " << m_sauce
 		<< " , " << "topping : " << m_topping << std::endl;
 	}
 
@@ -35,7 +34,6 @@ private:
 	std::string m_dough;
 	std::string m_sauce;
 	std::string m_topping;
-	std::string m_name;
 };
 
 // Abstract Builder
@@ -70,7 +68,6 @@ public:
 	}
 	
 	// buildPart()
-	virtual void buildPizzaName() = 0;
     virtual void buildDough() = 0;
     virtual void buildSauce() = 0;
     virtual void buildTopping() = 0;
@@ -79,29 +76,27 @@ public:
 };
 
 // Concrete Builder
-class CSpicyPizzaBuilder : public CPizzaBuilder
+class CSuperSupremePizzaBuilder : public CPizzaBuilder
 {
 public:
 	// buildPart()
-	virtual void buildPizzaName() override 	{ pizza->setPizzaName("SpicyPizza"); }
     virtual void buildDough() override		{ pizza->setDough("pan baked"); }
-    virtual void buildSauce() override		{ pizza->setSauce("hot"); }
-    virtual void buildTopping() override	{ pizza->setTopping("pepperoni and salami"); }
-
-	virtual ~CSpicyPizzaBuilder() = default;
-};
-
-// Concrete Builder
-class CHawaiianPizzaBuilder : public CPizzaBuilder
-{
-public:
-	// buildPart()
-	virtual void buildPizzaName() override	{ pizza->setPizzaName("HawaiianPizza"); }
-    virtual void buildDough() override		{ pizza->setDough("cross"); }
     virtual void buildSauce() override		{ pizza->setSauce("mild"); }
     virtual void buildTopping() override	{ pizza->setTopping("ham and pineaple"); }
 
-	virtual ~CHawaiianPizzaBuilder() = default;
+	virtual ~CSuperSupremePizzaBuilder() = default;
+};
+
+// Concrete Builder
+class CPotatoPizzaBuilder : public CPizzaBuilder
+{
+public:
+	// buildPart()
+    virtual void buildDough() override		{ pizza->setDough("pan baked"); }
+    virtual void buildSauce() override		{ pizza->setSauce("mild"); }
+    virtual void buildTopping() override	{ pizza->setTopping("potato"); }
+
+	virtual ~CPotatoPizzaBuilder() = default;
 };
 
 // Director
@@ -116,7 +111,6 @@ public:
 	void constructPizza()
 	{
 		pizzaBuilder->createPizzaProduct();
-		pizzaBuilder->buildPizzaName();
 		pizzaBuilder->buildDough();
 		pizzaBuilder->buildSauce();
 		pizzaBuilder->buildTopping();
@@ -139,17 +133,17 @@ int main()
 {
 	CWaiter waiter;
 	
-	CHawaiianPizzaBuilder hawaiianPizzaBuilder;
-	waiter.setPizzaBuilder(&hawaiianPizzaBuilder);
+	CSuperSupremePizzaBuilder superSupremePizzaBuilder;
+	waiter.setPizzaBuilder(&superSupremePizzaBuilder);
 	waiter.constructPizza();
-	auto hwaiianPizza = waiter.getPizza();
-	hwaiianPizza->printPizzaInfo();
+	auto superSupremePizza = waiter.getPizza();
+	superSupremePizza->printPizzaInfo();
 
-	CSpicyPizzaBuilder spicyPizzaBuilder;
-	waiter.setPizzaBuilder(&spicyPizzaBuilder);
+	CPotatoPizzaBuilder potatoPizzaBuilder;
+	waiter.setPizzaBuilder(&potatoPizzaBuilder);
 	waiter.constructPizza();
-	auto spicyPizza = waiter.getPizza();
-	spicyPizza->printPizzaInfo();
+	auto potatoPizza = waiter.getPizza();
+	potatoPizza->printPizzaInfo();
 	
 	return 0;
 }

@@ -9,10 +9,9 @@ public:
 	void setDough(const std::string& dough) 	{ m_dough = dough; }
 	void setSauce(const std::string& sauce) 	{ m_sauce = sauce; }
 	void setTopping(const std::string& topping) { m_topping = topping; }
-	void setPizzaName(const std::string& name) 	{ m_name = name;	}	
 	void printPizzaInfo() const
 	{
-		std::cout << m_name << " => dough : " << m_dough << " , " << "sauce : " << m_sauce 
+		std::cout << "dough : " << m_dough << " , " << "sauce : " << m_sauce
 		<< " , " << "topping : " << m_topping << std::endl;
 	}
 
@@ -20,7 +19,6 @@ private:
 	std::string m_dough;
 	std::string m_sauce;
 	std::string m_topping;
-	std::string m_name;
 };
 
 class CPizzaBuilder
@@ -50,7 +48,6 @@ public:
 	}
 
 	// same production process
-	void buildPizzaName(const std::string& name) 	{ pizza->setPizzaName(name); }
     void buildDough(const std::string& dough) 		{ pizza->setDough(dough); }
     void buildSauce(const std::string& sauce) 		{ pizza->setSauce(sauce); }
     void buildTopping(const std::string& topping) 	{ pizza->setTopping(topping); }
@@ -69,31 +66,29 @@ private:
 
 int main()
 {
-	// product : spicy pizza
+	// product : Super Supreme
 	CPizzaBuilder pizzaBuilder1;
 	
 	// same pizza production process
 	pizzaBuilder1.createPizzaProduct();
-	pizzaBuilder1.buildPizzaName("spicy pizza");
 	pizzaBuilder1.buildDough("pan baked");
-	pizzaBuilder1.buildSauce("hot");
-	pizzaBuilder1.buildTopping("pepperoni and salami");
+	pizzaBuilder1.buildSauce("mild");
+	pizzaBuilder1.buildTopping("ham and pineaple");
 	
-	auto spicyPizza = pizzaBuilder1.getPizza();
-	spicyPizza->printPizzaInfo();
+	auto superSupremePizza = pizzaBuilder1.getPizza();
+	superSupremePizza->printPizzaInfo();
 	
-	// product : hwaiian pizza
+	// product : potato
 	CPizzaBuilder pizzaBuilder2;
 	
 	// same pizza production process
 	pizzaBuilder2.createPizzaProduct();
-	pizzaBuilder2.buildPizzaName("Hawaiian pizza");
-	pizzaBuilder2.buildDough("cross");
+	pizzaBuilder2.buildDough("pan baked");
 	pizzaBuilder2.buildSauce("mild");
-	pizzaBuilder2.buildTopping("ham and pineaple");
+	pizzaBuilder2.buildTopping("potato");
 	
-	auto hwaiianPizza = pizzaBuilder2.getPizza();
-	hwaiianPizza->printPizzaInfo();	
+	auto potatoPizza = pizzaBuilder2.getPizza();
+	potatoPizza->printPizzaInfo();
 
 	return 0;
 }
