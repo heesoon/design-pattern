@@ -76,7 +76,10 @@ class CPizzFactoryBase
 {
 public:
 	// factory method
-	virtual static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType) = 0;
+	static std::unique_ptr<CPizza> productPizza(const std::string &pizzaType)
+	{
+		return nullptr;
+	}
 };
 
 class CPizzFactory : public CPizzFactoryBase
