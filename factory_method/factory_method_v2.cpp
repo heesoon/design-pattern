@@ -48,9 +48,9 @@ public:
 		up->setSauce("mild");
 		up->setTopping("ham and pineaple");
 		
-		return up;  // return up; 는 up를 return하면서 up를 실제 받는 변수에 up를 전달하는 것과 같다.
-					// std::unique_ptr<CPizza> a = CSuperSupremePizza(); 이라면
-					// a.reset(up);
+		// redundant std::move
+		// http://vmpstr.blogspot.com/2015/12/redundant-stdmove.html
+		return up;
 	}
 };
 
@@ -64,10 +64,10 @@ public:
 		up->setDough("pan baked");
 		up->setSauce("mild");
 		up->setTopping("potato");
-		
-		return up;  // return up; 는 up를 return하면서 up를 실제 받는 변수에 up를 전달하는 것과 같다.
-					// std::unique_ptr<CPizza> a = CPotatoPizza(); 이라면
-					// a.reset(up);
+
+		// redundant std::move
+		// http://vmpstr.blogspot.com/2015/12/redundant-stdmove.html
+		return up;
 	}
 };
 
