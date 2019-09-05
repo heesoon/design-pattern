@@ -4,7 +4,6 @@
 ## bridge pattern category
 * Structural pattern
 
-## 다중상속을 통한 Adaptor Pattern
 ![bridge](/docs/images/bridge.png)
 
 ## bridge pattern을 고려할 때
