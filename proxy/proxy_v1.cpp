@@ -53,7 +53,7 @@ public:
 	CProxyServer()
 	{
 		// occassionaly lazy initialization can be applied.
-		realServer = std::make_shared<CServer>();
+		realServer = std::make_unique<CServer>();
 	}
 	
 	virtual bool login(const std::string& id, const std::string& pw) const override
@@ -74,7 +74,7 @@ public:
 	}
 
 private:
-	std::shared_ptr<CIServer> realServer;
+	std::unique_ptr<CIServer> realServer;
 };
 
 int main()
