@@ -38,7 +38,7 @@ study of design pattern based on modern c++
 	* 중앙 집중적인 관리가 필요한 경우에 적용 가능하다
 	* 객체간에는 통신할 수 없고, 반드시 proxy를 거쳐야 한다.
 	
-## 해동패턴(Behavioral Patterns)
+## 행동패턴(Behavioral Patterns)
 * chain of responsibility
 	* 책임을 특정 객체에 집중하기 보다는 자신이 책임지지 않는 기능이라도 일단 받고, 관련 객체에 전달하는 방식
 * command
