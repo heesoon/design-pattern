@@ -1,10 +1,10 @@
-![builder](/docs/images/builder.png)
-
 # builder pattern
 * 최종 객체를 생성하는 과정은 동일하다. 하지만 생성과정에 투입된 값(representation)에 따라 최종 결과물인 객체는 다르다.
 
 ## builder pattern category
 * creational pattern
+
+![builder](/docs/images/builder.png)
 
 ## builder pattern을 고려할 때
 * 객체 생성과정이 복잡하다. 생성자의 입력 파라미터가 너무 많고 복잡하다.
