@@ -1,5 +1,5 @@
 # Adaptor pattern
-* 최종 객체를 생성하는 과정은 동일하다. 하지만 생성과정에 투입된 값(representation)에 따라 최종 결과물인 객체는 다르다.
+* 두 클래스 또는 객체간에 interface가 호환되지 않지만 서로 통신해야 할 경우 적용
 
 ## Adaptor pattern category
 * Structural pattern
