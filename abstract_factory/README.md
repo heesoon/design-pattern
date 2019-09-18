@@ -5,7 +5,7 @@
 ## abstract factor pattern category
 * Structural pattern
 
-## 다중상속을 통한 Adaptor Pattern
+## abstract factory UML
 ![abstract_factory](/docs/images/abstract_factory.png)
 
 ## abstract factor pattern을 고려할 때
