@@ -6,7 +6,7 @@
 * Structural pattern
 
 ## 다중상속을 통한 Adaptor Pattern
-![abstract_factor](/docs/images/abstract_factor.png)
+![abstract_factory](/docs/images/abstract_factory.png)
 
 ## abstract factor pattern을 고려할 때
 * 단순 객체 생성만으로 객체가 온전히 생성되지 않고, 관련 dependent나 관계된 객체가 같이 생성되어야만 온전한 객체 생성이 완료되는 경우 적용 가능
