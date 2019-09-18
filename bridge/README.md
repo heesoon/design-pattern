@@ -4,6 +4,7 @@
 ## bridge pattern category
 * Structural pattern
 
+## bridge pattern UML
 ![bridge](/docs/images/bridge.png)
 
 ## bridge pattern을 고려할 때
