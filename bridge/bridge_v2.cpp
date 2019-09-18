@@ -6,9 +6,20 @@
 /*
 	c++ bridge pattern - version 2
 
-	Bridge 패턴을 기준으로 CShape는 implementation(구현부)가 된다. 이 부분의 변경을 막고자 한다.
-	Client에 해당하는 CEditor가 CShape을 바로 사용하는 대신에
-	CEditor와 CShape 사이에 두 클래스간의 변화를 완충해 줄 Bride를 추가한다.
+	bridge_v1.cpp에서 제기된 문제를 해결하기 위해서 bridge pattern을 적용한 코드이다.
+	adaptor pattern과 겹치는 부분이 많기는 하지만, bridge pattern은 클래스 상속이 아닌 객체를 통한 문제해결 방식이다.
+	
+	CShape를 수정하지 않고, 신규 update() 함수를 추가하는 것은
+	abstract class와 concrete class간의 decoupling 방식으로 구현하는 패턴이다.
+	abstract class와 concrete class를 변경하지 않겠다는 의미이다.
+	
+	이를 위해서 신규 bridge class를 추가한다.
+	bridge class는 CShape의 객체의 포인터를 가지고 있어서 기존 기능은 CShape를 통해서 지원한다.
+	신규 기능인 udpate()는 bridge class에 추가하여 대응한다.
+	
+	결국 CShape의 상위 클래스를 클래스 상속이 아닌 객체를 통해서 만들어내는 결과가 된다
+	update()함수까지 필요하지 않는 사용자는 기존 CShape 상속 계보로 구현된 코드를 사용하면 되고,
+	update()까지 필요한 사용자는 bridge 통해서 생성된 객체를 사용하면 된다.
 */
 
 // 구현부
