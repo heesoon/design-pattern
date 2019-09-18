@@ -1,6 +1,6 @@
 # abstract factory pattern
-* factory method가 단일 객체 생성에 중점을 두었다면, abstract factory는 이를 확장한 복잡객체 생성으로 확장한 버전이다.
-* factory method처럼 자신이 객체 생성에 관여하기 보다는 별도의 위임한 객체(factory)가 객체생성을 전담한다.
+* factory method가 단일 객체 생성에 중점을 두었다면, abstract factory는 factory method를 확장한 복합객체 생성에 중점을 두고 있다.
+* 실제 객체 생성은 객체생성을 위임받은(factory)에서 수행한다.
 
 ## abstract factor pattern category
 * Creational pattern
