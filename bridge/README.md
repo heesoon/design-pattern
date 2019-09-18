@@ -1,5 +1,8 @@
 # bridge pattern
-* implementation에서 abstraction을 분리하여 서로의 변화가 영향을 주지 않도록 설계하는 디자인 패턴이다.
+* abstract class와 concrete class간의 decoupling을 지향하는 패턴
+* 이말은 기존 abstract와 concrete class간의 상속계보를 통해서 신규 기능을 추가하지 않겠다는 의미와 같다.
+* 클래스 상속을 통한 방식이 아닌 객체를 통한 문제 해결 방식이다.
+* adaptor와 다소 겹치는 부분이 있어 보인다.
 
 ## bridge pattern category
 * Structural pattern
@@ -8,13 +11,12 @@
 ![bridge](/docs/images/bridge.png)
 
 ## bridge pattern을 고려할 때
-* 전형적인 클래스 상속을 이용한 디자인 패턴이다.
-* 구현부는 클래스 상속을 통해서 구현된 부분이다. 사용자가 이 구현부를 바로 사용하는 중에
-* 사용자가 구현부 클래스에 존재하지 않는 추가적인 기능을 요구할 경우, 구현부를 고쳐야 하는 부담이 존재한다.
-* 구현부는 그대로 나두고, 구현부와 사용자간의 중간 역활을 수행할 클래스를 추가하는 방식이다.
+* 신규 요구사항 접수로 abstract class에 신규 method을 추가해야 하는 상황이 발생
+* 하지만 abstract class의 method 추가는 위험부담이 크다.
+* 기본 코드를 변경없이 신규 method를 추가해야 하는 경우
 
 ## 구현코드 설명
 * bridge_v1.cpp
-	* 문제가 있는 예제로 이 예제로부터 bridge 패턴을 유도한다.
+	* start code로 전형적인 상속 계보를 통해서 구현된 코드이며, 이 코드의 문제점에 대해서 코드상에 기술하였다.
 * bridge_v2.cpp
-	* bridge 패턴을 이용한 bridge_v1.cpp의 문제점을 개선
+	* bridge pattern을 써야할 상황에 대해서 구현한 코드
