@@ -5,10 +5,10 @@
 /*
 	c++ fatory method design pattern - version 1
 	
-	아래 main함수에서 먼저 피자객체를 생성하고, 생성된 피자객체에 대해서 세부설정을 해주어야한다.
-	만약 main함수가 피자주문을 받는 waiter라고 가정하면 매우 비생산적인 구조이다.
-	
-	이 코드를 factory method design pattern과 연계하여 개선해보는 것이 목표이다.
+	일반적으로 클래스에서 객체를 생성해서 사용하는 시나리오이다.
+	main 함수는 사용자(client)라고 봤을 떄, 사용자는 객체를 생성하기 위해서 모든 내용을 알고 있어야 한다.
+	사용자에게 세부 객체 생성 설정은 감추고, 대신 객체를 생성해 주는 대리자를 통해서 간단하게 생성하는 방식이 필요하다.
+	factory method는 이 대리자가 동일하고 일관된 interface를 갖도록 구현하는 것이다.
 */
 
 class CPizza

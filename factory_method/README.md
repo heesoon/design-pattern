@@ -1,22 +1,23 @@
 # factory method pattern
-* 객체 생성을 자신이 하지 않고, 객체 생성을 전담하는 객체(factory)에 자신의 객체 생성을 위임한다.
-* factory에는 객체를 생성하는 interface(method)를 제공하고, 실제 어떤 클래스가 instantiate될지는 subclass에서 결정한다.
+* 객체생성자(client)에게 객체 생성 logic을 노출하지 않는다.
+* 객체생성자가 새로운 객체를 생성할 때, 일관되고 동일한 방식의 interface를 제공하는 대리자를 둔다.
+* 반드시 객체 생성을 전담하는 대리자가 있어야하는지는 의문이다.(?)
 
 ## factory method pattern category
-* creational pattern
+* Creational pattern
 
 ## factory method pattern UML
 ![factory_method](/docs/images/factory_method.png)
 
 ## factory_method pattern을 고려할 때
-* client는 abstract base class는 알지만 (추상적으로 어떤 객체를 만들것인가 추론이 가능), concrete subclass는 알지 못한다.
-* run-time 객체 생성
-* subclass가 실제 객체를 생성
+* abstract factory와 같이 보면 이해도가 높다.
 
 ## 구현코드 설명
 * factory_method_v1.cpp
 	* start code
 * factory_method_v2.cpp
 	* factory method pattern으로 변경
+	* GoF의 UML과 가장 유사하게 구현한 코드
 * factory_method_v3.cpp
-	* factory_method_v2.cpp에서 static 함수로 활용하여 변경
+	* 별도의 대리자(creator)를 두지 않고 product내에서 모두 처리하는 예제
+	* GoF에서 말하는 factory method pattern에 부합하지는 않지만, 나름 가능한 코드이다.

@@ -10,10 +10,7 @@
 	
 */
 
-// "2) 어떤 클래스의 객체를 생성할지는 서브클래스에서 결정한다."
-// 실제 생성할 객체는 CPizza이다. 하지만 CPizza는 interface만 제공한다.
-// 실제 생성할 객체의 결정은 CPizza에서 상속받은 자식클래스에서 결정한다.
-
+// product base class에 해당한다.
 class CPizza
 {
 public:
@@ -35,7 +32,7 @@ private:
 	std::string m_topping;
 };
 
-// 2) CPizza로부터 상속받은 Concrete class를 통해 객체를 생성한다.
+// subclass에 해당하는 CPizza(product)의 concrete class이다.
 class CSuperSupremePizza : public CPizza
 {
 public:
@@ -54,6 +51,7 @@ public:
 	}
 };
 
+// subclass에 해당하는 CPizza(product)의 concrete class이다.
 class CPotatoPizza : public CPizza
 {
 public:
@@ -71,13 +69,14 @@ public:
 	}
 };
 
-// 1) 객체 생성을 전담하는 클래스를 별도로 둔다.
+// 객체 생성을 전담하는 대리자인 factory class(Creator)를 둔다.
 class CPizzFactoryBase
 {
 public:
 	virtual std::unique_ptr<CPizza> productPizza(const std::string &pizzaType) = 0;
 };
 
+// Creator의 concrete class
 class CPizzFactory : public CPizzFactoryBase
 {
 public:
@@ -101,6 +100,9 @@ public:
 
 int main()
 {
+	// CPizza와 CPizza Factory class가 library내에 존재한다고 가정하고
+	// main 함수의 구현은 client라고 했을 때, library 변경에 따른 main 함수 변경은 없다.
+
 	std::unique_ptr<CPizzFactoryBase> factory = std::make_unique<CPizzFactory>();
 	std::unique_ptr<CPizza> superSupremePizza = factory->productPizza("superSupreme");
 	superSupremePizza->printPizzaInfo();
