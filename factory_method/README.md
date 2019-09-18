@@ -5,6 +5,7 @@
 ## factory method pattern category
 * creational pattern
 
+## factory method pattern UML
 ![factory_method](/docs/images/factory_method.png)
 
 ## factory_method pattern을 고려할 때

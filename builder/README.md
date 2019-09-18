@@ -4,6 +4,7 @@
 ## builder pattern category
 * creational pattern
 
+## builder pattern UML
 ![builder](/docs/images/builder.png)
 
 ## builder pattern을 고려할 때
